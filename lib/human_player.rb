@@ -6,11 +6,17 @@ class HumanPlayer < Player
     loop do
       @game.display_board
       round_number = "This is round #{@game.round} of #{@game.number_of_rounds}. "
-      print "\n#{round_number}#{self} choose carefullty a letter: "
-      guessed_letter = gets.chomp.upcase
-      if guessed_letter.size == 1
-        @game.round += 1
-        return guessed_letter
+      print "\n#{round_number}#{self} does want to save? (y/n): "
+      saving = gets.chomp.downcase == 'y'
+      if saving
+        @game.save
+      else
+        print "\nChoose carefullty a letter: "
+        guessed_letter = gets.chomp.upcase
+        if guessed_letter.size == 1
+          @game.round += 1
+          return guessed_letter
+        end
       end
     end
   end

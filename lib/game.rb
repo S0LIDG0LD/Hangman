@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'yaml'
 # first class is the board with 9 editable spaces in a 3x3 matrix layout
 # This class should also display the board status to the screen
 class Game
+  SAVES_FOLDER = 'saves'
   NUMBER_OF_ROUNDS = 12
   SHORTER_WORD = 5
   LONGER_WORD = 12
@@ -25,6 +27,32 @@ class Game
     exit unless File.exist? dictionary_file
     # puts File.readlines(dictionary_file).size
     File.readlines(dictionary_file).select { |word| word.chomp.size.between?(SHORTER_WORD, LONGER_WORD) }
+  end
+
+  def to_yaml
+    YAML.dump({
+                mastermind: @mastermind,
+                player: @player,
+                dictionary => @dictionary,
+                solution: @solution,
+                guess: @guess,
+                round: @round
+              })
+  end
+
+  def self.from_yaml(string)
+    data = YAML.safe_load string
+    p data
+    new(data[:mastermind], data[:player], data[:dictionary], data[:solution], data[:guess], data[:round])
+  end
+
+  def save
+    Dir.mkdir SAVES_FOLDER
+    Dir.chdir SAVES_FOLDER
+    f = File.new "#{DateTime}.save", 'w'
+    # File.open(f)
+    f.puts to_yaml
+    f.close
   end
 
   def game_title
