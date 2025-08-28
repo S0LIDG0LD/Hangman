@@ -2,12 +2,16 @@
 
 # This class is needed to add a Human Player in the game
 class HumanPlayer < Player
-  def make_guess!
+  def choose_letter!
     loop do
+      @game.display_board
       round_number = "This is round #{@game.round} of #{@game.number_of_rounds}. "
-      print "#{round_number}Choose a letter: "
-      guessed_letter = gets.chomp
-      return guessed_letter if guessed_letter.size == 1
+      print "\n#{round_number}#{self} choose carefullty a letter: "
+      guessed_letter = gets.chomp.upcase
+      if guessed_letter.size == 1
+        @game.round += 1
+        return guessed_letter
+      end
     end
   end
 

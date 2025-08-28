@@ -8,6 +8,6 @@ require_relative 'lib/gianna_ai_player'
 
 loop do
   Game.new(GiannaAIPlayer, HumanPlayer, 'google-10000-english-no-swears.txt').play_game
-  print 'Play another game? (y/n) '
+  print "\nPlay another game? (y/n) "
   return unless gets.chomp == 'y'
 end
