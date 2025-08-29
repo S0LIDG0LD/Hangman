@@ -6,7 +6,7 @@ class HumanPlayer < Player
     loop do
       @game.display_board
       round_number = "This is round #{@game.round} of #{@game.number_of_rounds}. "
-      print "\n#{round_number}#{self} does want to save? (y/n): "
+      print "\n#{round_number}#{self} does want to save and exit the game? (y/n): "
       saving = gets.chomp.downcase == 'y'
       if saving
         @game.save

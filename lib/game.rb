@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require 'fileutils'
 # first class is the board with 9 editable spaces in a 3x3 matrix layout
 # This class should also display the board status to the screen
 class Game
@@ -31,11 +32,10 @@ class Game
 
   def to_yaml
     YAML.dump({
-                mastermind: @mastermind,
-                player: @player,
-                dictionary => @dictionary,
+                # mastermind: @mastermind,
+                # player: @player,
                 solution: @solution,
-                guess: @guess,
+                guess: @guess.join,
                 round: @round
               })
   end
@@ -47,12 +47,13 @@ class Game
   end
 
   def save
-    Dir.mkdir SAVES_FOLDER
-    Dir.chdir SAVES_FOLDER
-    f = File.new "#{DateTime}.save", 'w'
+    FileUtils.mkdir_p(SAVES_FOLDER)
+    FileUtils.cd(SAVES_FOLDER) unless FileUtils.pwd == 'saves'
+    f = File.new "#{Time.now}.save", 'w'
     # File.open(f)
-    f.puts to_yaml
+    f << to_yaml
     f.close
+    exit
   end
 
   def game_title
