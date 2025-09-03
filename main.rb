@@ -6,28 +6,22 @@ require_relative 'lib/game'
 require_relative 'lib/human_player'
 require_relative 'lib/constants'
 # require_relative 'lib/gianna_ai_player'
+require 'yaml'
 
 def choose_save
-  puts 'choose_save'
-  @savegames.each_with_index { |save, index| puts "#{index + 1}. #{save}" }
+  savegames = create_savegames_list
+  savegames.each_with_index { |save, index| puts "#{index + 1}. #{save}" }
   print "\n#{Constants::PLAYER} chooses a save game to load: "
   save_game_number = gets.chomp.to_i
-  @savegames[save_game_number - 1]
+  savegames[save_game_number - 1]
 end
 
 def load_game(save_game)
-  FileUtils.chdir 'saves'
-  puts Dir.getwd
-  # save_file = File.read(@savegames[index])
-  # # puts save_file
-  # self.from_yaml(save_file)
-  puts File.exist? save_game
-  puts save_game
-  save_file = File.open(File.join(Dir.pwd, save_game), 'r')
-  puts save_file
-  game = YAML.unsafe_load(save_file)
+  FileUtils.chdir "#{Constants::ROOT_DIR}/#{Constants::SAVES_FOLDER}"
+  save_file = File.open(File.join(Dir.getwd, save_game), 'r')
+  loaded_game = YAML.safe_load(save_file, permitted_classes: [Symbol])
   save_file.close
-  game
+  loaded_game
 end
 
 def start_game
@@ -46,14 +40,23 @@ def start_game
 end
 
 def savegames_found?
-  @savegames = Dir.entries Constants::SAVES_FOLDER
-  @savegames.select! { |file| file[-5, 5] == '.save' }
-  # puts @savegames
-  @savegames.any?(/save/)
+  savegames = create_savegames_list
+  savegames.any?(/save/)
+end
+
+def create_savegames_list
+  savegames = Dir.entries Constants::SAVES_FOLDER
+  savegames.select! { |file| file[-5, 5] == '.save' }
 end
 
 loop do
-  game = start_game == '1' ? Game.new(HumanPlayer).play_game : load_game(choose_save)
+  # new(data[:solution], data[:guess], data[:round])
+  if start_game == '1'
+    game = Game.new.play_game
+  else
+    loaded_game = load_game(choose_save)
+    game = Game.new(loaded_game[:solution], loaded_game[:guess], loaded_game[:round]).play_game
+  end
   print "\nPlay another game? (y/n) "
   return unless gets.chomp == 'y'
 end
