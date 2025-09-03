@@ -5,7 +5,7 @@ class HumanPlayer < Player
   def choose_letter!
     loop do
       @game.display_board
-      round_number = "This is round #{@game.round} of #{@game.number_of_rounds}. "
+      round_number = "This is round #{@game.round} of #{Constants::NUMBER_OF_ROUNDS}. "
       print "\n#{round_number}#{self} does want to save and exit the game? (y/n): "
       saving = gets.chomp.downcase == 'y'
       if saving

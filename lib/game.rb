@@ -17,16 +17,23 @@ class Game
     puts @savegames
     @solution = solution.nil? ? pick_dictionary_word : solution
     puts "The solution is #{@solution}"
-    @guess = guess.nil? ? Array.new(@solution.size, '_').join(' ') : guess
+    # @guess = guess.nil? ? Array.new(@solution.size, '_').join(' ') : guess
+    # @guess = ""
+    # @solution.size.times { @guess << '_ ' }.rstrip!
+    @guess = guess.nil? ? '_ ' * @solution.size : guess
     @round = round.nil? ? 1 : round
     puts "\n#{Constants::PLAYER} has #{Constants::NUMBER_OF_ROUNDS - @round.to_i + 1} rounds to guess the word or the Hangman won't be rescued!"
   end
 
   def pick_dictionary_word
-    exit unless File.exist? DICTIONARY_FILE
-    dictionary = File.readlines(DICTIONARY_FILE).select { |word| word.chomp.size.between?(SHORTER_WORD, LONGER_WORD) }
-    dictionary.sample.upcase.chomp
+    exit unless File.exist? Constants::WORDS_FILE_NAME
+    dictionary = File.readlines(Constants::WORDS_FILE_NAME).select { |word| allowed?(word) }
     puts "\n#{Constants::MASTERMIND} choose a really tricky word, BEWARE!"
+    dictionary.sample.upcase.chomp
+  end
+
+  def allowed?(word)
+    word.chomp.size.between?(Constants::SHORTER_WORD_SIZE, Constants::LONGER_WORD_SIZE)
   end
 
   def update_round
@@ -81,8 +88,8 @@ class Game
   def play_game
     # choose_save if savegames_found?
     loop do
-      if @round > NUMBER_OF_ROUNDS
-        puts "\n#{@player} had #{NUMBER_OF_ROUNDS} rounds to guess the solution, but #{@player} failed\n"
+      if @round > Constants::NUMBER_OF_ROUNDS
+        puts "\n#{@player} had #{Constants::NUMBER_OF_ROUNDS} rounds to guess the solution, but #{Constants::PLAYER} failed\n"
         puts "\nThe H A N G M A N is D E A D"
         return
       elsif guessed_with?(@player.choose_letter!)
@@ -122,9 +129,5 @@ class Game
     # puts "\nH A N G M A N : #{@guess.join(' ')}\n"
     puts "\nH A N G M A N : #{@guess}\n"
     # puts
-  end
-
-  def number_of_rounds
-    NUMBER_OF_ROUNDS
   end
 end

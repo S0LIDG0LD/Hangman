@@ -8,9 +8,9 @@ require_relative 'lib/constants'
 # require_relative 'lib/gianna_ai_player'
 
 def choose_save
-  puts
+  puts 'choose_save'
   @savegames.each_with_index { |save, index| puts "#{index + 1}. #{save}" }
-  print "\n#{@player} chooses a save game to load: "
+  print "\n#{Constants::PLAYER} chooses a save game to load: "
   save_game_number = gets.chomp.to_i
   @savegames[save_game_number - 1]
 end
@@ -38,10 +38,11 @@ def start_game
   puts '2) Load Game'
   print "\nHumanoid chooses one game mode: "
   game_choice = gets.chomp
-  until Constants::NEW_GAME_CHOICE.include?(game_choice)
+  until Constants::GAME_CHOICE.include?(game_choice)
     print 'Game mode not yet discovered. Humanoid chooses one of the discovered game modes: '
     game_choice = gets.chomp
   end
+  game_choice
 end
 
 def savegames_found?
@@ -52,7 +53,7 @@ def savegames_found?
 end
 
 loop do
-  game = start_game == 1 ? Game.new(HumanPlayer).play_game : load_game(choose_save)
+  game = start_game == '1' ? Game.new(HumanPlayer).play_game : load_game(choose_save)
   print "\nPlay another game? (y/n) "
   return unless gets.chomp == 'y'
 end

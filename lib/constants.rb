@@ -9,7 +9,7 @@ class Constants
   WORDS_FILE_NAME = 'google-10000-english-no-swears.txt'
   MASTERMIND = 'Gianna AI'
   PLAYER = 'Humanoid'
-  NEW_GAME_CHOICE = %w[1 2].freeze
+  GAME_CHOICE = %w[1 2].freeze
 
   # def self.saves_folder
   #   SAVES_FOLDER
