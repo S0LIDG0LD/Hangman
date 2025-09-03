@@ -52,10 +52,10 @@ end
 loop do
   # new(data[:solution], data[:guess], data[:round])
   if start_game == '1'
-    game = Game.new.play_game
+    Game.new.play_game
   else
     loaded_game = load_game(choose_save)
-    game = Game.new(loaded_game[:solution], loaded_game[:guess], loaded_game[:round]).play_game
+    Game.new(loaded_game[:solution], loaded_game[:guess], loaded_game[:round]).play_game
   end
   print "\nPlay another game? (y/n) "
   return unless gets.chomp == 'y'

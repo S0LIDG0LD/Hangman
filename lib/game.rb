@@ -81,7 +81,9 @@ class Game
   def guessed_with?(letter)
     check(letter)
     guessed = @solution == @guess.delete(' ')
-    puts "\nCongratulations #{Constants::PLAYER}! #{Constants::PLAYER} guessed correctly the #{@solution} in #{@round - 1} rounds" if guessed
+    if guessed
+      puts "\nCongratulations #{Constants::PLAYER}! #{Constants::PLAYER} guessed correctly the #{@solution} in #{@round - 1} rounds"
+    end
     guessed
   end
 
