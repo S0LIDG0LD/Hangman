@@ -4,6 +4,6 @@
 class Player
   def initialize(game)
     @game = game
-    @guess = ''
+    # @guess = ''
   end
 end

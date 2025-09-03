@@ -14,7 +14,7 @@ class HumanPlayer < Player
         print "\nChoose carefullty a letter: "
         guessed_letter = gets.chomp.upcase
         if guessed_letter.size == 1
-          @game.round += 1
+          @game.update_round
           return guessed_letter
         end
       end
